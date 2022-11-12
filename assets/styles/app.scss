@@ -1,0 +1,112 @@
+@import "~bootstrap/scss/bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+// global variables start
+:root {
+    --main-color: #a2122a;
+    --light-red: #FF6171;
+    --light-orange: #FFC300;
+    --green: #009900;
+    --black: #000000;
+    --white: #FFFFFF;
+
+}
+// global variables end
+
+// global rules start
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+a {
+    text-decoration: none;
+}
+a:hover {
+    color: var(--white);
+}
+a,
+input,
+button {
+    border: none;
+    outline: none;
+}
+.form-control,
+.form-control:focus {
+    outline: none;
+    box-shadow: none;
+}
+.form-control:focus {
+    border-color: var(--main-color);
+}
+ul {
+    list-style-type: none; 
+}
+.etoile {
+    color: var(--main-color);
+}
+.title-page-form {
+    color: var(--main-color);
+    margin-top: $spacer * 3;
+}
+.a-link {
+    color: var(--main-color);
+    font-size: 24px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: .3s all;
+}
+.a-link:hover {
+    cursor: pointer;
+    background: var(--main-color);
+}
+// global rules end
+
+// form d'ajout start
+.form-inner {
+    width: 600px;
+    margin: 10px auto;
+}
+@media(max-width: 768px) {
+    .form-inner {
+        width: 90%;
+    }
+}
+.btn-submit {
+    border: 2px solid var(--main-color);
+    color: var(--main-color);
+    background: var(--white);
+    padding: 10px 40px;
+    border-radius: 6px;
+    transition: .3s all; 
+}
+.btn-submit:hover {
+    cursor: pointer;
+    color: var(--white);
+    background: var(--main-color);
+}
+// form d'ajout end
+
+// liste personnes start
+.title-list {
+    color: var(--main-color);
+    margin-top: $spacer * 3;
+    margin-bottom: $spacer * 8;
+}
+.action {
+    padding: 8px 16px;
+    color: var(--white);
+    border-radius: 8px;
+    opacity: 0.9;
+    transition: .3s opacity;
+}
+.delete-action {
+    background: var(--light-red);
+}
+.edit-action {
+    background: var(--light-orange);
+}
+// liste personnes end

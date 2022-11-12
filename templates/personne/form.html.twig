@@ -1,0 +1,63 @@
+{% block body %}
+
+    <div class="container p-4 mx-auto mb-5">
+        <div class="form-inner">
+            <div class="mb-3">
+                <a class="a-link" href="{{ path('personnes_list') }}">retourner à la liste</a>
+            </div>
+            <div class="my-3">
+                <span class="etoile">*</span> Champ obligatoire
+            </div>
+            {{ form_start(form) }}
+                <div class="form-group form-row">
+                    {{ form_label(form.nom, null, { 'label_attr': {'class': 'form-label'} }) }}&nbsp;&nbsp;<span class="etoile">*</span>
+                    {{ form_widget(form.nom, { 'attr': { 
+                        'class': 'form-control mb-2',
+                        'autocomplete': 'off'
+                    }}) }}
+                    {{ form_errors(form.nom) }}
+                </div>
+                <div class="form-group form-row">
+                    {{ form_label(form.prenom, null, { 'label_attr': {'class': 'form-label'} }) }}&nbsp;&nbsp;<span class="etoile">*</span>
+                    {{ form_widget(form.prenom, { 'attr': { 
+                        'class': 'form-control mb-2',
+                        'autocomplete': 'off'  
+                    }}) }}
+                    {{ form_errors(form.prenom) }}
+                </div>
+                <div class="form-group form-row">
+                    {{ form_label(form.dateNaissance, null, { 'label_attr': {'class': 'form-label'} }) }}&nbsp;&nbsp;<span class="etoile">*</span>
+                    {{ form_widget(form.dateNaissance, { 'attr': { 
+                        'class': 'form-control mb-2',
+                    }}) }}
+                    {{ form_errors(form.dateNaissance) }}
+                </div>
+                <div class="form-group form-row">
+                    {{ form_label(form.adresse, null, { 'label_attr': {'class': 'form-label'} }) }}&nbsp;&nbsp;<span class="etoile">*</span>
+                    {{ form_widget(form.adresse, { 'attr': { 
+                        'class': 'form-control mb-2',
+                    }}) }}
+                    {{ form_errors(form.adresse) }}
+                </div>
+                <div class="form-group form-row">
+                    {{ form_label(form.ville, null, { 'label_attr': {'class': 'form-label'} }) }}&nbsp;&nbsp;<span class="etoile">*</span>
+                    {{ form_widget(form.ville, { 'attr': { 
+                        'class': 'form-control mb-2',
+                    }}) }}
+                    {{ form_errors(form.ville) }}
+                </div>
+                <div class="form-group form-row">
+                    {{ form_label(form.codePostale, null, { 'label_attr': {'class': 'form-label'} }) }}&nbsp;&nbsp;<span class="etoile">*</span>
+                    {{ form_widget(form.codePostale, { 'attr': { 
+                        'class': 'form-control mb-2',
+                    }}) }}
+                    {{ form_errors(form.codePostale) }}
+                </div>
+                <div class="form-group form-row-submit mt-4 text-center">
+                    {{ form_widget(form.send, { 'attr': { 'class': 'btn-submit mt-2' } }) }}
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+{% endblock %}
