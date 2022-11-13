@@ -17,21 +17,23 @@ class Personne
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Champ obligatoire")]
+    #[Assert\Length(max: 30, maxMessage: "30 caractères maximum")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Champ obligatoire")]
+    #[Assert\Length(max: 30, maxMessage: "30 caractères maximum")]
     private ?string $prenom = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $dateNaissance = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Length(max: 100, maxMessage: "100 caracteres maximum")]
+    #[Assert\Length(max: 100, maxMessage: "100 caractères maximum")]
     private ?string $adresse = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Length(max: 30, maxMessage: "30 caracteres maximum")]
+    #[Assert\Length(max: 20, maxMessage: "20 caractères maximum")]
     private ?string $ville = null;
 
     #[ORM\Column]
