@@ -4,6 +4,8 @@ Symfony--version: 6.1.7
 
 *NodeJs--version: 18.9.0
 
+.env.local file is used instead of .env file (.gitignore could not ignore the .env file)
+
 => AdminController routes can be accessed only by the SUPER_ADMIN
 
 => All PersonneController routes are protected (config/packages/security.yaml)
