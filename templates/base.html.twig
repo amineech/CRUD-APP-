@@ -9,6 +9,17 @@
         {% endblock %}
     </head>
     <body>
+
+        {% block flashes %}
+            {% if app.session.has('red_msg') %}
+                <div class="alert alert-danger my-4 mx-auto text-center w-50">{{ app.session.remove('red_msg') }}</div>
+            {% endif %}
+
+            {% if app.session.has('green_msg') %}
+                <div class="alert alert-success my-4 mx-auto text-center w-50">{{ app.session.remove('green_msg') }}</div>
+            {% endif %}
+        {% endblock %}
+
         {% block body %}
 
             {# Contenu ici... #}

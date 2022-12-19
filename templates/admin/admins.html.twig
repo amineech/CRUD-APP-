@@ -1,0 +1,71 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Admins - Liste{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        {% include "layout/navbar.html.twig" %}
+    </div>
+
+    <h1 class="text-center title-list">Liste des admins</h1>
+
+    {# liste des personnes #}
+    <table class="table table-light">
+        <thead>
+            <tr>
+                <th scope="col">Nom d'utilisateur</th>
+                <th scope="col">Email</th>
+                <th scope="col">Roles</th>
+                <th scope="col">Verfication</th>
+                <th scope="col">Approval</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for admin in admins %}
+                {% if loop.index0 > 0 %} {# we don't want to display SUPER_ADMIN user (firt user in this case) ! #}
+                    <tr class="py-3">
+                        <td> {{ admin.username }} </td>
+                        <td> {{ admin.email }} </td>
+                        <td>
+                            {% for role in admin.roles %}
+                                <span class="text-dark h6">{{ role|replace({"ROLE_": ""}) }}</span> <br>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% if admin.isVerified %}
+                                <span class="text-success h6">Vérifié</span>
+                            {% else %}
+                                <span class="text-danger h6">Non vérifié</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if admin.isApproved %}
+                                <span class="text-success h6">Approuvé</span>
+                            {% else %}
+                                <span class="text-danger h6">Non approuvé</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a class="btn btn-danger" href="{{path('admins_delete', {id: admin.id})}}">Supprimer</a>
+                            {% if admin.isApproved %}
+                                {# action pour desactiver (isApproved => false) un admin #}
+                                <a class="btn btn-danger" href="{{ path('admins_user_disable', {
+                                    id: admin.id
+                                }) }}">Désactiver</a>
+                            {% else %}
+                                {# action pour activer (isApproved => true) un admin #}
+                                <a class="btn btn-success" href="{{ path('admins_user_enable', {
+                                    id: admin.id
+                                }) }}">Activer</a>
+                            {% endif %}
+                            
+                        </td>
+                    </tr>                
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+<nav>
+    {% if app.user %}
+        <div class="d-flex justify-content-lg-end p-3">
+            {% if is_granted("ROLE_SUPER_ADMIN") %}
+                <a class="btn btn-primary" href="{{ path('admins_list') }}">Liste des admins</a>
+            {% endif %}
+            <a class="btn btn-dark mx-4" href="{{ path('personnes_list') }}">Liste des personnes</a>
+            <a class="btn btn-dark" href="{{ path('logout') }}">Se déconnecter</a>
+        </div>
+    {% endif %}
+</nav>

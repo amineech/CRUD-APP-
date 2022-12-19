@@ -10,31 +10,39 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 #[Route('/personnes', name: 'personnes_')]
 class PersonneController extends AbstractController
 {
     #[Route('/list', name: 'list')]
-    public function listPersonnesAction(EntityManagerInterface $entityManager)
-    {
-        // recuperation des donnees de la base
+    public function listPersonnesAction(EntityManagerInterface $entityManager, Security $security) {
+        
+        // forbid disabled admins (by SUPER_ADMIN) from accessing their accounts 
+        if(!$security->isGranted('personnes_list', $security->getUser()))
+            throw new NotFoundHttpException("Votre compte est temporairement desactivé par le SUPER_ADMIN");
+        
         $personnes = $entityManager->getRepository(Personne::class)->findAll();
 
-        // affichage de lapage
         return $this->render('personne/personnes.html.twig', [
             'personnes' => $personnes
         ]);
     }
 
     #[Route('/add', name: 'add')]
-    public function ajoutPersonneAction(EntityManagerInterface $entityManager, Request $request, Session $session)
-    {
+    public function ajoutPersonneAction(EntityManagerInterface $entityManager, Request $request, Session $session, Security $security) {
+        
+        // forbid disabled admins (by SUPER_ADMIN) from accessing their accounts 
+        if(!$security->isGranted('personnes_add', $security->getUser()))
+            throw new NotFoundHttpException("Votre compte est temporairement desactivé par le SUPER_ADMIN");
+
         $personne = new Personne();
         
         $form = $this->createForm(PersonneType::class, $personne);
 
-        // bouton d'ajout
+        // add button
         $form->add('send', SubmitType::class, [
             'label' => 'Ajouter'
         ]);
@@ -42,26 +50,29 @@ class PersonneController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            // ajout a la BD
+            // save to DB
             $entityManager->persist($personne);
             $entityManager->flush();
 
             // flash message 
-            $session->set('personne_message', 'Personne Ajoutée !');
+            $session->set('green_msg', 'Personne Ajoutée !');
 
-            // redirection vers la liste des personnes
             return $this->redirectToRoute('personnes_list');
         }
 
 
-        // affichage de la page de formulaire
+        // display form
         return $this->render('personne/add.html.twig', [
             'form' => $form->createView()
         ]);
     }
 
     #[Route('/edit/{nom}-{prenom}-{id}', name: 'edit')]
-    public function editPersonneAction(string $nom, string $prenom, int $id, EntityManagerInterface $entityManager, Request $request, Session $session) {
+    public function editPersonneAction(string $nom, string $prenom, int $id, EntityManagerInterface $entityManager, Request $request, Session $session, Security $security) {
+
+        // forbid disabled admins (by SUPER_ADMIN) from accessing their accounts 
+        if(!$security->isGranted('personnes_edit', $security->getUser()))
+            throw new NotFoundHttpException("Votre compte est temporairement desactivé par le SUPER_ADMIN");
 
         $personne = $entityManager->getRepository(Personne::class)->findOneBy([
             'id' => $id,
@@ -70,33 +81,38 @@ class PersonneController extends AbstractController
         ]);
         $form = $this->createForm(PersonneType::class, $personne);
 
-        // bouton de modification
+        // edit button
         $form->add('send', SubmitType::class, [ 'label' => 'Modifier' ]);
         
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            // mise a jour de la date de modification
+            // update the updateAt field
             $personne->setUpdatedAt(new DateTimeImmutable());
-            // enregistrer les modifications 
+            
+            // save changes 
             $entityManager->flush();
             
             // flash message
-            $session->set('personne_message', 'Personne modifiée');
+            $session->set('green_msg', 'Personne modifiée');
             
-            // redirection vers la liste des personnes
             return $this->redirectToRoute('personnes_list');
         }
 
-        // affichage de la page de formulaire
+        // display form
         return $this->render('personne/edit.html.twig', [
             'form' => $form->createView()
         ]);
     }
 
     #[Route('/delete/{nom}-{prenom}-{id}', name: 'delete')]
-    public function deletePersonneAction(string $nom, string $prenom, int $id, EntityManagerInterface $entityManager, Session $session) {
+    public function deletePersonneAction(string $nom, string $prenom, int $id, EntityManagerInterface $entityManager, Session $session, Security $security) {
 
+        // forbid disabled admins (by SUPER_ADMIN) from accessing their accounts 
+        if(!$security->isGranted('personnes_delete', $security->getUser()))
+            throw new NotFoundHttpException("Votre compte est temporairement desactivé par le SUPER_ADMIN");
+
+        // find person
         $personne = $entityManager->getRepository(Personne::class)->findOneBy([
             'id' => $id,
             'nom' => $nom,
@@ -104,19 +120,18 @@ class PersonneController extends AbstractController
         ]);
 
         if(!is_null($personne)) {
-            // suppression d'enregistrement
+            // delete row
             $entityManager->remove($personne);
             $entityManager->flush();
 
             // flash message
-            $session->set('personne_deleted', 'Personne Supprimée !');
-            return $this->redirectToRoute('personnes_list');
-        } else {
-            // flash message (cas ou personne n'existe pas)
-            $session->set('personne_deleted', 'Personne n\'existe pas !');
-            return $this->redirectToRoute('personnes_list');
-        }
+            $session->set('red_msg', 'Personne Supprimée !');
 
+            return $this->redirectToRoute('personnes_list');
+        } 
+
+        // handle case when person does not exist
+        $session->set('red_msg', 'Personne n\'existe pas !');
+        return $this->redirectToRoute('personnes_list');
     }
-
 }

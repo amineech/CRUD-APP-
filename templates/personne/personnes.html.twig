@@ -5,23 +5,14 @@
 {% block body %}
 
     <div class="container">
+
+        {% include "layout/navbar.html.twig" %}
+
         <h1 class="text-center title-list">Liste des personnes</h1>
 
         <div class="mb-3">
             <a class="a-link" href="{{ path('personnes_add') }}">Ajouter une personne</a>
         </div>
-
-        {# message ajout ou modification #}
-        {% if app.session.has('personne_message') %}
-            {# affichage et destruction du variable session a la fois #}
-            <h6 class="alert alert-success my-3 text-center ">{{ app.session.remove('personne_message') }}</h6>
-        {% endif %}
-
-        {# message suppression #}
-        {% if app.session.has('personne_deleted') %}
-            {# affichage et destruction du variable session a la fois #}
-            <h6 class="alert alert-danger my-3 text-center ">{{ app.session.remove('personne_deleted') }}</h6>
-        {% endif %}
 
         {# liste des personnes #}
         <table class="table table-light">
