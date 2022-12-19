@@ -1,6 +1,8 @@
 CRUD-APP made by Symfony Framework
 
---version: 6.1.7
+Symfony--version: 6.1.7
+
+*NodeJs--version: 18.9.0
 
 => AdminController routes can be accessed only by the SUPER_ADMIN
 => All PersonneController routes are protected (config/packages/security.yaml)
@@ -10,4 +12,7 @@ CRUD-APP made by Symfony Framework
    before they can access their accounts and manipulate the "personnes".
 => SUPER_ADMIN can disbale or enable ADMINs, 
 => SUPER_ADMIN is the only one that has access to ADMINs list 
+
+
+
 
